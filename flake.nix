@@ -27,39 +27,39 @@
 
   outputs = inputs@{ self, nixpkgs, flake-utils, ... }: flake-utils.lib.eachDefaultSystem (system: {
     legacyPackages = nixpkgs.legacyPackages.${system}.extend (final: prev: {
-      python3 = prev.python3.overrride (o: {
-          packageOverrides = final.lib.composeExtensions
-            (o.packageOverrides or (_:_: { }))
-            (pfinal: pprev: {
-              kicad = pfinal.toPythonModule (final.runCommand "kicad-python" { } ''
-                mkdir -p $(dirname "$out/${pfinal.python.sitePackages}")
-                ln -s "${final.kicad-master.src}/${pfinal.python.sitePackages}" "$out/${pfinal.python.sitePackages}"
-              '');
-              hierplace = pfinal.callPackage
-                ({ buildPythonPackage }: buildPythonPackage {
-                  pname = "hierplace";
-                  version = "master";
-                  src = inputs.hierplace-src;
-                  doCheck = false;
-                })
-                { };
-              kinet2pcb = pfinal.callPackage
-                ({ buildPythonPackage, pytest-runner, pytest, kinparse, hierplace, kicad }: buildPythonPackage {
-                  pname = "kinet2pcb";
-                  version = "master";
-                  src = inputs.kinet2pcb-src;
-                  propagatedBuildInputs = [ pytest-runner pytest kinparse hierplace kicad ];
-                  doCheck = false;
-                })
-                { };
-              kinparse = pprev.kinparse.overrideAttrs (o: {
-                src = inputs.kinparse-src;
-              });
-              skidl = pprev.skidl.overrideAttrs (o: {
-                src = inputs.skidl-src;
-                propagatedBuildInputs = (o.propagatedBuildInputs or [ ]) ++ [ pfinal.kinet2pcb ];
-              });
+      python3 = prev.python3.override (o: {
+        packageOverrides = final.lib.composeExtensions
+          (o.packageOverrides or (_:_: { }))
+          (pfinal: pprev: {
+            kicad = pfinal.toPythonModule (final.runCommand "kicad-python" { } ''
+              mkdir -p $(dirname "$out/${pfinal.python.sitePackages}")
+              ln -s "${final.kicad-master.src}/${pfinal.python.sitePackages}" "$out/${pfinal.python.sitePackages}"
+            '');
+            hierplace = pfinal.callPackage
+              ({ buildPythonPackage }: buildPythonPackage {
+                pname = "hierplace";
+                version = "master";
+                src = inputs.hierplace-src;
+                doCheck = false;
+              })
+              { };
+            kinet2pcb = pfinal.callPackage
+              ({ buildPythonPackage, pytest-runner, pytest, kinparse, hierplace, kicad }: buildPythonPackage {
+                pname = "kinet2pcb";
+                version = "master";
+                src = inputs.kinet2pcb-src;
+                propagatedBuildInputs = [ pytest-runner pytest kinparse hierplace kicad ];
+                doCheck = false;
+              })
+              { };
+            kinparse = pprev.kinparse.overrideAttrs (o: {
+              src = inputs.kinparse-src;
             });
+            skidl = pprev.skidl.overrideAttrs (o: {
+              src = inputs.skidl-src;
+              propagatedBuildInputs = (o.propagatedBuildInputs or [ ]) ++ [ pfinal.kinet2pcb ];
+            });
+          });
       });
     });
     devShell =

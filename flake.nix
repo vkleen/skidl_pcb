@@ -8,7 +8,7 @@
       url = github:numtide/flake-utils;
     };
     skidl-src = {
-      url = github:devbisme/skidl;
+      url = github:vkleen/skidl;
       flake = false;
     };
     kinet2pcb-src = {

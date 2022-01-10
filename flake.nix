@@ -82,10 +82,10 @@
           pyright
         ]);
         shellHook = with pkgs.kicad-master.libraries; ''
-          export KICAD_SYMBOL_DIR=${symbols}
-          export KICAD6_SYMBOL_DIR=${symbols}
-          export KICAD_FOOTPRINT_DIR=${footprints}
-          export KICAD6_FOOTPRINT_DIR=${footprints}
+          export KICAD_SYMBOL_DIR=${symbols}/share/kicad/symbols
+          export KICAD6_SYMBOL_DIR=${symbols}/share/kicad/symbols
+          export KICAD_FOOTPRINT_DIR=${footprints}/share/kicad/footprints
+          export KICAD6_FOOTPRINT_DIR=${footprints}/share/kicad/footprints
         '';
       };
   });

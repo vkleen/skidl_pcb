@@ -33,7 +33,7 @@
           (pfinal: pprev: {
             kicad = pfinal.toPythonModule (final.runCommand "kicad-python" { } ''
               mkdir -p $(dirname "$out/${pfinal.python.sitePackages}")
-              ln -s "${final.kicad-master.src}/${pfinal.python.sitePackages}" "$out/${pfinal.python.sitePackages}"
+              ln -s "${final.kicad-master.base}/${pfinal.python.sitePackages}" "$out/${pfinal.python.sitePackages}"
             '');
             hierplace = pfinal.callPackage
               ({ buildPythonPackage }: buildPythonPackage {
